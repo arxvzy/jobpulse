@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-class User extends Authenticatable
+class Employer extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
@@ -18,11 +18,12 @@ class User extends Authenticatable
      * @var list<string>
      */
     protected $fillable = [
-        'name',
+        'company_name',
         'email',
-        'username',
         'password',
-        'resume'
+        'username',
+        'company_address',
+        'company_phone',  
     ];
 
     /**
@@ -32,23 +33,11 @@ class User extends Authenticatable
      */
     protected $hidden = [
         'password',
-        'remember_token',
     ];
 
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
-    protected function casts(): array
+
+    public function jobs()
     {
-        return [
-            'password' => 'hashed',
-        ];
-    }
-    
-    public function applications()
-    {
-        return $this->hasMany(Application::class);
+        return $this->hasMany(Job::class);
     }
 }
