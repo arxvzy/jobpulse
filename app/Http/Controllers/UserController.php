@@ -8,38 +8,29 @@ use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function profile()
     {
         $user = Auth::user();
         return view('user.profile', compact('user'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(User $user)
+    public function updateProfile(Request $request)
     {
-        return view('user.edit', compact('user'));
-    }
+        $user = Auth::user();
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, User $user)
-    {
         $validated = $request->validate([
-            'name' => 'required|string',
-            'email' => 'required|email|unique:users,email,' . $user->id,
-            'password' => 'required|string|min:6',
-            'username' => 'required|string|unique:users,username,' . $user->id,
-            'role' => 'nullable',
+            'name' => 'required|string|max:255',
+            'username' => 'required|string|max:255|unique:users,username,' . $user->id,
+            'resume' => 'nullable|file|mimes:pdf|max:2048',
         ]);
 
-        $user->update($validated);
-        return redirect()->route('user.index')->with('success', 'User updated successfully');
-    }
+        if ($request->hasFile('resume')) {
+            $path = $request->file('resume')->store('resumes', 'public');
+            $validated['resume'] = $path;
+        }
 
+        $user->update($validated);
+
+        return redirect()->back()->with('success', 'Profile updated successfully.');
+    }
 }
