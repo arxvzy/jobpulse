@@ -3,9 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Job extends Model
 {
+    use HasFactory;
+    protected $table = 'job_posts';
     protected $fillable = [
         'title',
         'description',
@@ -13,7 +16,7 @@ class Job extends Model
         'location',
         'job_type',
         'status',  
-        'employer_id',
+        'user_id',
     ];
 
     public function applications()
@@ -21,8 +24,8 @@ class Job extends Model
         return $this->hasMany(Application::class);
     }
 
-    public function employer()
+    public function user()
     {
-        return $this->belongsTo(Employer::class);
+        return $this->belongsTo(User::class);
     }
 }
