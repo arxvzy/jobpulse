@@ -13,12 +13,10 @@ return new class extends Migration
     {
         Schema::create('applications', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('job_id');
-            $table->unsignedBigInteger('user_id');
-            $table->string('application_status');
-            $table->datetimes('application_date');
-            $table->foreign('job_id')->references('id')->on('jobs');
-            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+            $table->foreignId('job_id')->constrained('job_posts')->onDelete('cascade');
+            $table->string('application_status')->default('pending');
+            $table->timestamp('application_date')->useCurrent();
             $table->timestamps();
         });
     }
