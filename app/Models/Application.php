@@ -3,12 +3,14 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Application extends Model
 {
+    use HasFactory;
     protected $fillable = [
-        'id_job',
-        'id_user',
+        'job_id',
+        'user_id',
         'application_status',
         'application_date'
     ];
@@ -22,4 +24,8 @@ class Application extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    protected $casts = [
+    'application_date' => 'datetime',
+];
 }
