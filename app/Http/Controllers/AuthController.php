@@ -37,7 +37,7 @@ class AuthController extends Controller
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
 
-            return redirect()->intended('home');
+            return redirect()->intended('/');
         }
 
         return back()->withErrors([
@@ -51,7 +51,7 @@ class AuthController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return redirect('/');
+        return redirect('/login');
     }
 
     public function handleRegister(Request $request)
@@ -61,16 +61,18 @@ class AuthController extends Controller
             'email' => 'required|email|unique:users,email',
             'password' => 'required|string|min:6',
             'username' => 'required|string|unique:users,username',
+            'role' => 'required|in:user,employer',
         ]);
-        
+
         User::create([
             'name' => $validated['name'],
             'email' => $validated['email'],
             'username' => $validated['username'],
+            'role' => $validated['role'],
             'password' => Hash::make($validated['password']),
         ]);
 
-        Session::flash('message', 'Register Berhasil. Akun Anda sudah Aktif silahkan Login menggunakan username dan password.');
+        Session::flash('message', 'Register Berhasil. Silakan login.');
         return redirect('login');
     }
 }
