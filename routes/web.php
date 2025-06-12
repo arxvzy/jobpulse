@@ -7,9 +7,7 @@ use App\Http\Controllers\EmployerController;
 use App\Http\Controllers\JobController;
 use App\Http\Controllers\ApplicationController;
 
-
 Route::get('/', [JobController::class, 'index'])->name('jobs.index');
-Route::put('/update-password', [UserController::class, 'updatePassword'])->name('user.update.password');
 
 
 /*
@@ -34,6 +32,7 @@ Route::post('/logout', [AuthController::class, 'handleLogout'])->middleware('aut
 Route::middleware('auth')->prefix('user')->name('user.')->group(function () {
     Route::get('/profile', [UserController::class, 'profile'])->name('profile');
     Route::put('/profile', [UserController::class, 'updateProfile'])->name('update');
+    Route::put('/update-password', [UserController::class, 'updatePassword'])->name('update-password');
 });
 
 /*
@@ -44,6 +43,7 @@ Route::middleware('auth')->prefix('user')->name('user.')->group(function () {
 Route::middleware('auth')->prefix('employer')->name('employer.')->group(function () {
     Route::get('/profile', [EmployerController::class, 'profile'])->name('profile');
     Route::put('/profile', [EmployerController::class, 'updateProfile'])->name('update');
+    Route::put('/update-password', [UserController::class, 'updatePassword'])->name('update-password');
 });
 
 /*
