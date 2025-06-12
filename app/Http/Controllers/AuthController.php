@@ -40,9 +40,7 @@ class AuthController extends Controller
             return redirect()->intended('/');
         }
 
-        return back()->withErrors([
-            'email' => 'The provided credentials do not match our records.',
-        ])->onlyInput('email');
+        return back()->with('error', 'Invalid credentials')->onlyInput('email');
     }
 
     public function handleLogout(Request $request)
@@ -72,7 +70,6 @@ class AuthController extends Controller
             'password' => Hash::make($validated['password']),
         ]);
 
-        Session::flash('message', 'Register Berhasil. Silakan login.');
-        return redirect('login');
+        return redirect('login')->with('success', 'Registration successful. Please login.');
     }
 }

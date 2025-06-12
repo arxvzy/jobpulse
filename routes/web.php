@@ -9,6 +9,7 @@ use App\Http\Controllers\ApplicationController;
 
 
 Route::get('/', [JobController::class, 'index'])->name('jobs.index');
+Route::put('/update-password', [UserController::class, 'updatePassword'])->name('user.update.password');
 
 
 /*

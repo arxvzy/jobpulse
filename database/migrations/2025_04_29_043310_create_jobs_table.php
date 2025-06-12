@@ -18,7 +18,7 @@ return new class extends Migration
             $table->float('salary');
             $table->string('location');
             $table->string('job_type');
-            $table->string('status');
+            $table->string('status')->default('open');
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();

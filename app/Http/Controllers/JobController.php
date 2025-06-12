@@ -10,11 +10,27 @@ use Illuminate\Support\Facades\Auth;
 class JobController extends Controller
 {
     // Tampilkan semua job 
-    public function index()
-    {
-        $jobs = Job::with('user')->latest()->get();
-        return view('jobs.index', compact('jobs'));
+public function index(Request $request)
+{
+    $jobs = Job::query();
+
+    if ($request->filled('keyword')) {
+        $jobs->where('title', 'like', '%' . $request->keyword . '%');
     }
+
+    if ($request->filled('location')) {
+        $jobs->where('location', 'like', '%' . $request->location . '%');
+    }
+
+    if ($request->filled('job_type')) {
+        $jobs->where('job_type', $request->job_type);
+    }
+
+    $jobs = $jobs->with('user', 'applications')->latest()->paginate(10)->withQueryString();
+
+    return view('jobs.index', compact('jobs'));
+}
+
 
     // Tampilkan job milik employer yang sedang login
     public function myJobs()
