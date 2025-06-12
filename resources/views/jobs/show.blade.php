@@ -3,41 +3,76 @@
 @section('title', 'Detail Lowongan')
 
 @section('content')
+    <div class="max-w-3xl mx-auto mt-10 bg-white p-6 rounded-lg shadow-lg border border-gray-100">
+        <a href="{{ url()->previous() }}"
+            class="inline-flex items-center bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700 transition mb-4 gap-2">
+            @include('svg.arrow-left')
+            Kembali
+        </a>
 
-    <div class="max-w-3xl mx-auto mt-10 bg-white p-6 rounded shadow">
-        <a href="{{ route('jobs.index') }}" class="text-blue-500 hover:underline mb-4 inline-block">← Kembali ke Daftar
-            Lowongan</a>
-        <h2 class="text-2xl font-bold mb-4">{{ $job->title }}</h2>
-        <p><strong>Perusahaan:</strong> {{ $job->user->company_name }}</p>
-        <p><strong>Lokasi:</strong> {{ $job->location }}</p>
-        <p><strong>Jenis:</strong> {{ $job->job_type }}</p>
-        <p><strong>Gaji:</strong> Rp{{ number_format($job->salary, 0, ',', '.') }}</p>
-        <p><strong>Status:</strong> {{ ucfirst($job->status) }}</p>
 
-        <div class="mt-4">
-            <h3 class="text-lg font-semibold mb-2">Deskripsi Pekerjaan</h3>
-            <p>{{ $job->description }}</p>
+
+        <div class="flex items-center gap-2 mb-4">
+            @include('svg.briefcase')
+            <h2 class="text-2xl font-bold text-gray-900">{{ $job->title }}</h2>
         </div>
 
-        @if (Auth::check() && Auth::user()->role === 'user')
-            @if (!$alreadyApplied)
-                <form action="{{ route('applications.store') }}" method="POST" class="mt-4">
-                    @csrf
-                    <input type="hidden" name="job_id" value="{{ $job->id }}">
+        <div class="text-sm text-gray-700 space-y-2">
+            <p class="flex items-center gap-1">
+                @include('svg.building-office-2')
+                <strong>Perusahaan:</strong> {{ $job->user->company_name }}
+            </p>
+            <p class="flex items-center gap-1">
+                @include('svg.map-pin2')
+                <strong>Lokasi:</strong> {{ $job->location }}
+            </p>
+            <p class="flex items-center gap-1">
+                @include('svg.clock2')
+                <strong>Tipe:</strong> {{ $job->job_type }}
+            </p>
+            <p class="flex items-center gap-1">
+                @include('svg.currency-dollar2')
+                <strong>Gaji:</strong> Rp{{ number_format($job->salary, 0, ',', '.') }}
+            </p>
+            <p class="flex items-center gap-1">
+                @include('svg.calendar')
+                <strong>Diposting:</strong> {{ $job->created_at->diffForHumans() }}
+            </p>
+            <p class="flex items-center gap-1">
+                @include('svg.status')
+                <strong>Status:</strong>
+                <span class="font-medium {{ $job->status === 'open' ? 'text-green-600' : 'text-red-600' }}">
+                    {{ ucfirst($job->status) }}
+                </span>
+            </p>
+        </div>
 
-                    <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                        Lamar Pekerjaan Ini
-                    </button>
-                </form>
-            @else
-                <p class="mt-4 text-gray-500 italic">Kamu sudah melamar pekerjaan ini.</p>
+        <div class="mt-6">
+            <h3 class="text-lg font-semibold mb-2">Deskripsi Pekerjaan</h3>
+            <p class="text-gray-700">{{ $job->description }}</p>
+        </div>
+
+        @auth
+            @if (Auth::user()->role === 'user')
+                @if (!$alreadyApplied)
+                    <form action="{{ route('applications.store') }}" method="POST" class="mt-6">
+                        @csrf
+                        <input type="hidden" name="job_id" value="{{ $job->id }}">
+                        <button type="submit"
+                            class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded cursor-pointer">
+                            Lamar Pekerjaan Ini
+                        </button>
+                    </form>
+                @else
+                    <p class="mt-6 text-gray-500 italic">Kamu sudah melamar pekerjaan ini.</p>
+                @endif
             @endif
         @else
             <a href="{{ route('login') }}"
-                class="mt-4 inline-block bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+                class="mt-6 inline-block bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 cursor-pointer">
                 Login untuk melamar pekerjaan ini
             </a>
-        @endif
+        @endauth
 
         @if (session('success'))
             <div class="mt-4 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded">
@@ -50,6 +85,5 @@
                 {{ session('error') }}
             </div>
         @endif
-
     </div>
 @endsection
