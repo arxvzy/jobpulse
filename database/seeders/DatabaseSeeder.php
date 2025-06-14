@@ -13,27 +13,26 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         User::factory()->create([
-            'name' => 'Admin',
-            'email' => 'admin@google.com',
-            'username' => 'admin',
+            'name' => 'admin1',
+            'email' => 'admin1@google.com',
+            'username' => 'admin1',
             'role' => 'employer',
             'password' => bcrypt('121212'),
             'email_verified_at' => now(),
             'remember_token' => Str::random(10),
-            'company_name' => 'Admin',
-            'company_address' => 'Admin',
+            'company_name' => 'admin1',
+            'company_address' => 'admin1',
             'company_phone' => '121212',
         ]);
 
         User::factory()->create([
-            'name' => 'Admin 2',
+            'name' => 'admin2',
             'email' => 'admin2@google.com',
             'username' => 'admin2',
             'role' => 'user',
             'password' => bcrypt('121212'),
             'email_verified_at' => now(),
             'remember_token' => Str::random(10),
-            'resume' => 'admin.pdf',
         ]);
 
         // 5 employers
