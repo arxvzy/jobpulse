@@ -20,8 +20,7 @@ class UserFactory extends Factory
             'email' => $this->faker->unique()->safeEmail(),
             'username' => $this->faker->unique()->userName(),
             'role' => $role,
-            'password' => bcrypt('password'), // default password
-            'resume' => $role === 'user' ? $this->faker->filePath() : null,
+            'password' => bcrypt('password'),
             'company_name' => $role === 'employer' ? $this->faker->company() : null,
             'company_address' => $role === 'employer' ? $this->faker->address() : null,
             'company_phone' => $role === 'employer' ? $this->faker->phoneNumber() : null,
